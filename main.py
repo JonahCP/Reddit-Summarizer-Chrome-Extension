@@ -74,14 +74,12 @@ def get_sentiment(prompt):
     )
     return response.choices[0].message.content
 
-# Main function to tie everything together
 def main():
     submission_url = "https://www.reddit.com/r/funny/comments/3g1jfi/buttons/"
     comments = fetch_comments(submission_url)
     prompt = create_prompt(comments)
     sentiment = get_sentiment(prompt)
     print(sentiment)
-
 
 if __name__ == "__main__":
     main()
