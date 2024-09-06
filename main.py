@@ -3,7 +3,15 @@ import os
 from dotenv import load_dotenv 
 import re
 from openai import OpenAI
-import openai
+import fastapi
+import time
+
+load_dotenv()
+client_id = os.getenv('CLIENT_ID')
+client_secret = os.getenv('CLIENT_SECRET')
+user_agent = os.getenv('USER_AGENT')
+
+app = fastapi.FastAPI()
 
 def contains_media(comment_body):
     # Regex to match media file extensions
@@ -14,11 +22,6 @@ def is_deleted_or_removed(comment_body):
     return comment_body in ["[deleted]", "[removed]"]
 
 def fetch_comments(submission_url, limit=10):
-    load_dotenv()
-    client_id = os.getenv('CLIENT_ID')
-    client_secret = os.getenv('CLIENT_SECRET')
-    user_agent = os.getenv('USER_AGENT')
-
     # Create a Reddit instance
     reddit = praw.Reddit(
         client_id=client_id,
@@ -74,12 +77,18 @@ def get_sentiment(prompt):
     )
     return response.choices[0].message.content
 
-def main():
+@app.get("/summarize")
+def root():
+    start_time = time.time()
     submission_url = "https://www.reddit.com/r/funny/comments/3g1jfi/buttons/"
     comments = fetch_comments(submission_url)
+    end_time = time.time()
+    time_reddit = end_time - start_time
+
+    start_time = time.time()
     prompt = create_prompt(comments)
     sentiment = get_sentiment(prompt)
-    print(sentiment)
+    end_time = time.time()
+    time_openai = end_time - start_time
 
-if __name__ == "__main__":
-    main()
+    return {"sentiment": sentiment, "time_reddit": time_reddit, "time_openai": time_openai}    
