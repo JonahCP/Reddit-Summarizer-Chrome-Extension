@@ -5,6 +5,8 @@ import re
 from openai import OpenAI
 import fastapi
 import time
+from fastapi import Request
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 client_id = os.getenv('CLIENT_ID')
@@ -12,6 +14,15 @@ client_secret = os.getenv('CLIENT_SECRET')
 user_agent = os.getenv('USER_AGENT')
 
 app = fastapi.FastAPI()
+
+# Add CORS middleware to handle OPTIONS requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow requests from any origin
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods, including POST
+    allow_headers=["*"],  # Allow all headers
+)
 
 def contains_media(comment_body):
     # Regex to match media file extensions
@@ -26,7 +37,8 @@ def fetch_comments(submission_url, limit=10):
     reddit = praw.Reddit(
         client_id=client_id,
         client_secret=client_secret,
-        user_agent=user_agent
+        user_agent=user_agent,
+        check_for_async=False
     )
 
     reddit.read_only = True
@@ -77,18 +89,12 @@ def get_sentiment(prompt):
     )
     return response.choices[0].message.content
 
-@app.get("/summarize")
-def root():
-    start_time = time.time()
-    submission_url = "https://www.reddit.com/r/funny/comments/3g1jfi/buttons/"
+@app.post("/summarize")
+async def summarize(request: Request):
+    data = await request.json()
+    submission_url = data["url"]
     comments = fetch_comments(submission_url)
-    end_time = time.time()
-    time_reddit = end_time - start_time
-
-    start_time = time.time()
     prompt = create_prompt(comments)
     sentiment = get_sentiment(prompt)
-    end_time = time.time()
-    time_openai = end_time - start_time
 
-    return {"sentiment": sentiment, "time_reddit": time_reddit, "time_openai": time_openai}    
+    return {"sentiment": sentiment}    
