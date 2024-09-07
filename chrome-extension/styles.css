@@ -1,0 +1,68 @@
+/* Source: https://css-tricks.com/snippets/css/typewriter-effect/ */
+.typewrite > .wrap {
+    border-right: 0.08em solid #000000; /* The typewriter cursor effect */
+}
+
+body {
+    /* Typewriter effect */
+    background-color: #f35e5e;
+    text-align: center;
+    color: #000000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+
+    width: 400px;
+    max-width: 400px;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: -20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+* {
+    color: #000000;
+    text-decoration: none;
+}
+
+/* Loading container */
+.loading-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    /* height: 100vh;           Full viewport height to center vertically */
+  }
+
+/* Loading icon */
+
+/* Source: https://loading.io/css/ */
+.lds-dual-ring,
+.lds-dual-ring:after {
+  box-sizing: border-box;
+}
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6.4px solid currentColor;
+  border-color: currentColor transparent currentColor transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

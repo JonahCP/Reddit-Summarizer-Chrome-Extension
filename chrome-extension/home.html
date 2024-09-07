@@ -4,12 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reddit Summarizer</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <h1>Reddit Summarizer</h1>
   <button id="summarizeButton">Summarize</button>
-  <p id="loadingIcon" style="display:none">Loading...</p>
-  <div id="output"></div>
+  <div id="loadingContainer" class="loading-container" style="display:none">
+    <div id="loadingIcon" class="lds-dual-ring"></div>
+  </div>
+  <a href="" id="output" class="typewrite">
+    <span class="wrap"></span>
 
   <script src="popup.js"></script> 
 </body>
