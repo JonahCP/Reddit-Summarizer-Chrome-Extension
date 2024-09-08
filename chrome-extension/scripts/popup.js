@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const loadingContainer = document.getElementById('loadingContainer');
     const loadingIcon = document.getElementById('loadingIcon');
     const output = document.getElementById('output');
+    const apiURL = 'https://gljyndxp6l.execute-api.us-east-2.amazonaws.com/prod'
 
     // Show the summary if it is already stored in the local storage
     // Get the active tab's URL
@@ -29,13 +30,21 @@ document.addEventListener('DOMContentLoaded', async function() {
         loadingContainer.style.display = 'block'; // Show loading container
 
         // Make a POST request to the server
-        const response = await fetch('http://localhost:8000/summarize', {
+        const response = await fetch(apiURL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ url: currentUrl })
         });
+
+        // Check if it's a reddit URL
+        if (!currentUrl.includes('reddit.com')) {
+            loadingIcon.style.display = 'none'; // Hide loading icon
+            new TxtType(output, ['Sorry, this feature is only available for Reddit posts.'], 1000)
+            output.style.display = 'block'; // Show the output
+            return;
+        }
 
         // Parse the JSON response
         const data = await response.json();

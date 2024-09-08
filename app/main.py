@@ -1,14 +1,12 @@
 import praw
 import os
-from dotenv import load_dotenv 
 import re
 from openai import OpenAI
 import fastapi
-import time
 from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 
-load_dotenv()
 client_id = os.getenv('CLIENT_ID')
 client_secret = os.getenv('CLIENT_SECRET')
 user_agent = os.getenv('USER_AGENT')
@@ -98,3 +96,5 @@ async def summarize(request: Request):
     sentiment = get_sentiment(prompt)
 
     return {"sentiment": sentiment}    
+
+handler = Mangum(app) # Wrap the FastAPI app with Mangum
