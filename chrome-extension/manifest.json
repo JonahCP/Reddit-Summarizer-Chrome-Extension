@@ -5,10 +5,11 @@
     "version": "1.0",
     "action": {
       "default_popup": "home.html",
-      "default_icon": "copywriting.png"
+      "default_icon": "images/copywriting.png"
     },
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "storage"
     ],
     "host_permissions": [
       "http://localhost:8000/*"

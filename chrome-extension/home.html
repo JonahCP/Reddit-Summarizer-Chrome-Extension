@@ -4,17 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reddit Summarizer</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-  <h1>Reddit Summarizer</h1>
-  <button id="summarizeButton">Summarize</button>
+  <h1>Reddit Summarizer
+    <img src="images/reddit-logo.png" alt="Reddit Logo" width="40" height="40">
+  </h1>
+  <button id="summarizeButton" class="button-34" role="button">Summarize</button>
   <div id="loadingContainer" class="loading-container" style="display:none">
     <div id="loadingIcon" class="lds-dual-ring"></div>
   </div>
-  <a href="" id="output" class="typewrite">
+  <div href="" id="output" class="typewrite" style="display:none">
     <span class="wrap"></span>
-
-  <script src="popup.js"></script> 
+  </div>
+  <script src="scripts/popup.js"></script> 
 </body>
 </html>

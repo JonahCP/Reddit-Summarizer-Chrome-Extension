@@ -1,19 +1,19 @@
 /* Source: https://css-tricks.com/snippets/css/typewriter-effect/ */
 .typewrite > .wrap {
-    border-right: 0.08em solid #000000; /* The typewriter cursor effect */
+    border-right: 0.08em solid #ffffff; /* The typewriter cursor effect */
 }
 
 body {
     /* Typewriter effect */
-    background-color: #f35e5e;
+    background-color: #0E1113;
     text-align: center;
-    color: #000000;
+    color: #ffffff;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
 
     width: 400px;
     max-width: 400px;
-    height: auto;
+    height: 202px;
     overflow-y: auto;
     overflow-x: hidden;
     margin-top: -20px;
@@ -21,9 +21,42 @@ body {
     box-sizing: border-box;
 }
 
+#output {
+    text-align: left;
+    word-wrap: break-word;
+    padding-bottom: 20px;
+}
+
+h1 img {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
 * {
-    color: #000000;
+    color: #ffffff;
     text-decoration: none;
+}
+
+/* CSS */
+.button-34 {
+  background: #115BCA;
+  border-radius: 999px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+  word-break: break-word;
+  border: 0;
 }
 
 /* Loading container */
@@ -31,11 +64,9 @@ body {
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center;     /* Center vertically */
-    /* height: 100vh;           Full viewport height to center vertically */
   }
 
 /* Loading icon */
-
 /* Source: https://loading.io/css/ */
 .lds-dual-ring,
 .lds-dual-ring:after {
