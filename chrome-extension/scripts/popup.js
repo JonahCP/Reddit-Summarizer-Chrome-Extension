@@ -1,31 +1,50 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const summarizeButton = document.getElementById('summarizeButton');
     const loadingContainer = document.getElementById('loadingContainer');
     const loadingIcon = document.getElementById('loadingIcon');
     const output = document.getElementById('output');
 
-    // summarizeButton.addEventListener('click', async function() {
-    //     output.innerText = ''; // Clear the output
-    //     loadingIcon.style.display = 'block'; // Show loading icon
+    // Show the summary if it is already stored in the local storage
+    // Get the active tab's URL
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const currentUrl = tabs[0].url;
 
-    //     // Get the active tab
-    //     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-    //     const url = tabs[0].url;
+    // Check if there is already a summary in storage and if the URL matches
+    chrome.storage.local.get(['summary', 'storedUrl'], function(result) {
+        console.log(result);
+        if (result.summary && result.storedUrl === currentUrl) {
+            // If a summary is found and the URL matches, show it in the output
+            summarizeButton.style.display = 'none'; // Hide the button
+            output.style.display = 'block'; // Show the output
+            output.innerText = result.summary;
+        } else {
+            // Clear the storage if the URL is different (or on page refresh)
+            chrome.storage.local.remove(['summary', 'storedUrl']);
+        }
+    });
 
-    //     // Make a POST request to the server
-    //     const response = await fetch('http://localhost:8000/summarize', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({ url: url })
-    //     });
+    summarizeButton.addEventListener('click', async function() {
+        output.innerText = ''; // Clear the output
+        summarizeButton.style.display = 'none'; // Hide the button
+        loadingContainer.style.display = 'block'; // Show loading container
 
-    //     // Parse the JSON response
-    //     const data = await response.json();
-    //     output.innerText = data.sentiment; 
-    //     loadingIcon.style.display = 'none'; // Hide loading icon
-    // });
+        // Make a POST request to the server
+        const response = await fetch('http://localhost:8000/summarize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: currentUrl })
+        });
+
+        // Parse the JSON response
+        const data = await response.json();
+        const sentiment = data.sentiment
+        loadingIcon.style.display = 'none'; // Hide loading icon
+        new TxtType(output, [sentiment], 1000)                
+        chrome.storage.local.set({summary: sentiment, storedUrl: currentUrl})
+        output.style.display = 'block'; // Show the output
+    });
 
     // Define the typewriter effect
     var TxtType = function(el, toRotate, period) {
@@ -52,29 +71,4 @@ document.addEventListener('DOMContentLoaded', function() {
         that.tick();
         }, delta);
     };
-
-    chrome.storage.local.get(['summary'], function(result) {
-        if (result.summary) {
-            summarizeButton.style.display = 'none';
-            output.style.display = 'block';
-            output.innerText = result.summary;
-        }
-    });
-
-    summarizeButton.addEventListener('click', async function() {
-        output.innerText = ''; // Clear the output
-        summarizeButton.style.display = 'none'; // Hide the button
-        loadingContainer.style.display = 'block'; // Show loading container
-
-        // delay for 2 seconds
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        let sentiment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada diam sit amet nibh sollicitudin auctor. Mauris eu nisl et lectus tincidunt maximus et sed risus. Maecenas sapien justo, consectetur euismod blandit nec, fringilla sit amet dolor. Phasellus accumsan tincidunt magna at porttitor. Donec congue, lectus in consequat tincidunt, metus massa rhoncus ipsum, ac vestibulum dolor ipsum quis."
-        loadingIcon.style.display = 'none'; // Hide loading icon
-        new TxtType(output, [sentiment], 1000)        
-        output.style.display = 'block'; // Show the output
-
-        chrome.storage.local.set({summary: sentiment})
-    });
-
 });
