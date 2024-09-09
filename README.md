@@ -2,6 +2,11 @@
 
 ##  Description
 This project is a Chrome extension that automatically summarizes top Reddit comments from a given post. The extension leverages the Reddit API to fetch comments and OpenAI's GPT model to provide a natural language summary. The backend is built with FastAPI and deployed on AWS Lambda using Docker for scalability.
+
+<p align="center">
+  <img src="redditSummarizerExample.gif" alt="Reddit Summarizer Example">
+</p>
+
 ## How to run
 To use the project on your own, follow these steps:
 1. **Register Reddit Script**: Create a Reddit script app to obtain your `CLIENT_ID`, `CLIENT_SECRET`, and `USER_AGENT` keys for API access
