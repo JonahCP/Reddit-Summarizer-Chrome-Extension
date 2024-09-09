@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const loadingContainer = document.getElementById('loadingContainer');
     const loadingIcon = document.getElementById('loadingIcon');
     const output = document.getElementById('output');
-    const apiURL = 'https://example';
+    const apiURL = 'https://jqdoj4mxxl.execute-api.us-east-2.amazonaws.com/summarize';
 
     // Show the summary if it is already stored in the local storage
     // Get the active tab's URL
