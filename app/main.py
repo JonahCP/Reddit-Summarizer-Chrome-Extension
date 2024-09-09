@@ -2,18 +2,22 @@ import praw
 import os
 import re
 from openai import OpenAI
+from dotenv import load_dotenv
 import fastapi
 from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
+import logging
 
-client_id = os.getenv('CLIENT_ID')
-client_secret = os.getenv('CLIENT_SECRET')
-user_agent = os.getenv('USER_AGENT')
+# Load environment variables if running locally
+# load_dotenv()
+client_id = os.environ.get('CLIENT_ID')
+client_secret = os.environ.get('CLIENT_SECRET')
+user_agent = os.environ.get('USER_AGENT')
 
 app = fastapi.FastAPI()
 
-# Add CORS middleware to handle OPTIONS requests
+# Add CORS middleware to handle OPTIONS requests (Only needed for local testing)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allow requests from any origin

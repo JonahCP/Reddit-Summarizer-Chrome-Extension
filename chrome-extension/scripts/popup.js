@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const loadingContainer = document.getElementById('loadingContainer');
     const loadingIcon = document.getElementById('loadingIcon');
     const output = document.getElementById('output');
-    const apiURL = 'https://gljyndxp6l.execute-api.us-east-2.amazonaws.com/prod'
+    const apiURL = 'https://example';
 
     // Show the summary if it is already stored in the local storage
     // Get the active tab's URL
@@ -28,16 +28,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         output.innerText = ''; // Clear the output
         summarizeButton.style.display = 'none'; // Hide the button
         loadingContainer.style.display = 'block'; // Show loading container
-
-        // Make a POST request to the server
-        const response = await fetch(apiURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ url: currentUrl })
-        });
-
+        
         // Check if it's a reddit URL
         if (!currentUrl.includes('reddit.com')) {
             loadingIcon.style.display = 'none'; // Hide loading icon
@@ -46,13 +37,33 @@ document.addEventListener('DOMContentLoaded', async function() {
             return;
         }
 
-        // Parse the JSON response
-        const data = await response.json();
-        const sentiment = data.sentiment
-        loadingIcon.style.display = 'none'; // Hide loading icon
-        new TxtType(output, [sentiment], 1000)                
-        chrome.storage.local.set({summary: sentiment, storedUrl: currentUrl})
-        output.style.display = 'block'; // Show the output
+        try {
+            // Make a POST request to the server
+            const response = await fetch(apiURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: currentUrl })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            // Parse the JSON response
+            const data = await response.json();
+            const sentiment = data.sentiment
+            loadingIcon.style.display = 'none'; // Hide loading icon
+            new TxtType(output, [sentiment], 1000)                
+            chrome.storage.local.set({summary: sentiment, storedUrl: currentUrl})
+            output.style.display = 'block'; // Show the output
+        } catch (error) {
+            console.error('Error:', error);
+            loadingIcon.style.display = 'none'; // Hide loading icon
+            new TxtType(output, ['Failed to fetch summary. Please try again later.'], 1000)
+            output.style.display = 'block'; // Show the output
+        }
     });
 
     // Define the typewriter effect
